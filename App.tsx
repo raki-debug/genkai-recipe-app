@@ -13,9 +13,9 @@ const LIFE_LABELS: Record<LifeLevel, string> = {
 };
 
 const LIFE_COLORS: Record<LifeLevel, string> = {
-  10: 'bg-red-500',
-  30: 'bg-orange-400',
-  50: 'bg-yellow-400',
+  10: '#ef4444',
+  30: '#fb923c',
+  50: '#facc15',
 };
 
 export default function App() {
@@ -28,33 +28,34 @@ export default function App() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-gray-950" contentContainerStyle={styles.scrollContent}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
       <StatusBar style="light" />
 
-      <Text className="text-3xl font-bold text-white mb-1">限界レシピ</Text>
-      <Text className="text-gray-400 mb-8">今の体力でできる1STEPご飯</Text>
+      <Text style={styles.title}>限界レシピ</Text>
+      <Text style={styles.subtitle}>今の体力でできる1STEPご飯</Text>
 
-      {/* ライフ選択 */}
-      <Text className="text-gray-300 font-semibold mb-3">今のライフ</Text>
-      <View className="flex-row gap-3 mb-6">
+      <Text style={styles.label}>今のライフ</Text>
+      <View style={styles.lifeLevels}>
         {LIFE_LEVELS.map((level) => (
           <TouchableOpacity
             key={level}
             onPress={() => setLife(level)}
-            className={`flex-1 py-3 rounded-xl ${LIFE_COLORS[level]} ${life === level ? 'opacity-100' : 'opacity-30'}`}
+            style={[
+              styles.lifeButton,
+              { backgroundColor: LIFE_COLORS[level], opacity: life === level ? 1 : 0.3 },
+            ]}
             accessibilityRole="button"
             accessibilityLabel={LIFE_LABELS[level]}
             accessibilityState={{ selected: life === level }}
           >
-            <Text className="text-white font-bold text-center text-sm">{LIFE_LABELS[level]}</Text>
+            <Text style={styles.lifeButtonText}>{LIFE_LABELS[level]}</Text>
           </TouchableOpacity>
         ))}
       </View>
 
-      {/* 食材入力 */}
-      <Text className="text-gray-300 font-semibold mb-3">食材（なければ空欄OK）</Text>
+      <Text style={styles.label}>食材（なければ空欄OK）</Text>
       <TextInput
-        className="bg-gray-800 text-white rounded-xl px-4 py-3 mb-8"
+        style={styles.input}
         placeholder="例: 卵、キャベツ、ベーコン"
         placeholderTextColor="#6b7280"
         value={ingredients}
@@ -62,24 +63,22 @@ export default function App() {
         accessibilityLabel="食材入力"
       />
 
-      {/* 生成ボタン */}
       <TouchableOpacity
         onPress={handleGenerate}
-        className="bg-indigo-500 py-4 rounded-2xl mb-8"
+        style={styles.generateButton}
         accessibilityRole="button"
         accessibilityLabel="レシピを生成"
       >
-        <Text className="text-white font-bold text-center text-lg">レシピを生成する</Text>
+        <Text style={styles.generateButtonText}>レシピを生成する</Text>
       </TouchableOpacity>
 
-      {/* レシピ表示 */}
       {recipe && (
-        <View className="bg-gray-800 rounded-2xl p-5" accessibilityLabel="レシピ結果">
-          <View className="flex-row items-center justify-between mb-3">
-            <Text className="text-white text-xl font-bold">{recipe.title}</Text>
-            <Text className="text-gray-400 text-sm">⏱ {recipe.time}</Text>
+        <View style={styles.recipeCard} accessibilityLabel="レシピ結果">
+          <View style={styles.recipeHeader}>
+            <Text style={styles.recipeTitle}>{recipe.title}</Text>
+            <Text style={styles.recipeTime}>⏱ {recipe.time}</Text>
           </View>
-          <Text className="text-gray-300 leading-6">{recipe.step}</Text>
+          <Text style={styles.recipeStep}>{recipe.step}</Text>
         </View>
       )}
     </ScrollView>
@@ -87,9 +86,88 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#030712',
+  },
   scrollContent: {
     paddingHorizontal: 20,
     paddingTop: 64,
     paddingBottom: 40,
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#ffffff',
+    marginBottom: 4,
+  },
+  subtitle: {
+    color: '#9ca3af',
+    marginBottom: 32,
+  },
+  label: {
+    color: '#d1d5db',
+    fontWeight: '600',
+    marginBottom: 12,
+  },
+  lifeLevels: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 24,
+  },
+  lifeButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 12,
+  },
+  lifeButtonText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 12,
+  },
+  input: {
+    backgroundColor: '#1f2937',
+    color: '#ffffff',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginBottom: 32,
+  },
+  generateButton: {
+    backgroundColor: '#6366f1',
+    paddingVertical: 16,
+    borderRadius: 16,
+    marginBottom: 32,
+  },
+  generateButtonText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 18,
+  },
+  recipeCard: {
+    backgroundColor: '#1f2937',
+    borderRadius: 16,
+    padding: 20,
+  },
+  recipeHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  recipeTitle: {
+    color: '#ffffff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  recipeTime: {
+    color: '#9ca3af',
+    fontSize: 14,
+  },
+  recipeStep: {
+    color: '#d1d5db',
+    lineHeight: 24,
   },
 });
