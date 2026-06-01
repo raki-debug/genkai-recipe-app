@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import './global.css';
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { getRecipe } from './src/recipeEngine';
 import { LifeLevel, RecipeResult } from './src/types';
 
@@ -29,7 +28,7 @@ export default function App() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-gray-950" contentContainerClassName="px-5 pt-16 pb-10">
+    <ScrollView className="flex-1 bg-gray-950" contentContainerStyle={styles.scrollContent}>
       <StatusBar style="light" />
 
       <Text className="text-3xl font-bold text-white mb-1">限界レシピ</Text>
@@ -86,3 +85,11 @@ export default function App() {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  scrollContent: {
+    paddingHorizontal: 20,
+    paddingTop: 64,
+    paddingBottom: 40,
+  },
+});
